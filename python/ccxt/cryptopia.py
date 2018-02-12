@@ -481,15 +481,18 @@ class cryptopia (Exchange):
         }
 
     def fetch_orders(self, symbol=None, since=None, limit=None, params={}):
-        if not symbol:
-            raise ExchangeError(self.id + ' fetchOrders requires a symbol param')
+        # if not symbol:
+            # raise ExchangeError(self.id + ' fetchOrders requires a symbol param')
         self.load_markets()
-        market = self.market(symbol)
-        response = self.privatePostGetOpenOrders({
-            # 'Market': market['id'],
-            'TradePairId': market['id'],  # Cryptopia identifier(not required if 'Market' supplied)
-            # 'Count': 100,  # default = 100
-        }, params)
+        args = {}
+        if symbol:
+            market = self.market(symbol)
+            args = {
+                # 'Market': market['id'],
+                'TradePairId': market['id'],  # Cryptopia identifier(not required if 'Market' supplied)
+                # 'Count': 100,  # default = 100
+            }
+        response = self.privatePostGetOpenOrders(args, params)
         orders = []
         for i in range(0, len(response['Data'])):
             orders.append(self.extend(response['Data'][i], {'status': 'open'}))
