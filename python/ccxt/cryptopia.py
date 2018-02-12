@@ -496,7 +496,7 @@ class cryptopia (Exchange):
         orders = []
         for i in range(0, len(response['Data'])):
             orders.append(self.extend(response['Data'][i], {'status': 'open'}))
-        openOrders = self.parse_orders(orders, market)
+        openOrders = self.parse_orders(orders)
         for j in range(0, len(openOrders)):
             self.orders[openOrders[j]['id']] = openOrders[j]
         openOrdersIndexedById = self.index_by(openOrders, 'id')
